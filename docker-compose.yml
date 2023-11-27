@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  springboot-eocService:
+    container_name: eoc-service
+    image: eoc-service
+    build:
+      context: ./
+      dockerfile: DockerFile
+    ports:
+      - 8082:8082
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3307/PatientInfo
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: on-failure

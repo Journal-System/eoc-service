@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "`Condition`")
+@Table(name = "`condition`")
 @Entity
 public class Condition {
 

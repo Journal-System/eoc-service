@@ -19,7 +19,7 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Encounter")
+@Table(name = "encounter")
 @Entity
 public class Encounter {
 

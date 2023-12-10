@@ -30,5 +30,6 @@ public class Condition {
     private String description;
 
     @Schema(example = "1")
+    @Column(name = "patientId")
     private Integer patientId;
 }

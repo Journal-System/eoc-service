@@ -10,7 +10,7 @@ import java.util.List;
 import static kth.numi.eocservice.dto.ObservationDto.convertObservationToDto;
 
 @Service
-public class ObservationServiceImpl implements ObservationService{
+public class ObservationServiceImpl implements ObservationService {
 
     private final ObservationRepository observationRepository;
 
@@ -29,9 +29,9 @@ public class ObservationServiceImpl implements ObservationService{
                 }
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Observation is null");
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("could not find patient");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find patient");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
 
@@ -41,13 +41,16 @@ public class ObservationServiceImpl implements ObservationService{
             Observation observation = observationRepository.findById(observationId).orElse(null);
 
             if(observation != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(convertObservationToDto(observation));
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(convertObservationToDto(observation));
             }
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find observation with id: " + observationId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Could not find this observation");
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred");
         }
     }
 
@@ -62,9 +65,9 @@ public class ObservationServiceImpl implements ObservationService{
                 observationRepository.save(newObservation);
                 return ResponseEntity.status(HttpStatus.OK).body(convertObservationToDto(newObservation));
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("could not find patient or staff/doctor");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find patient or staff/doctor");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
 
@@ -74,11 +77,11 @@ public class ObservationServiceImpl implements ObservationService{
             Observation observation = observationRepository.findById(id).orElse(null);
             if(observation != null) {
                 observationRepository.delete(observation);
-                return ResponseEntity.status(HttpStatus.OK).body("Observation deleted: " + convertObservationToDto(observation));
+                return ResponseEntity.status(HttpStatus.OK).body("This observation is deleted");
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("could not find observation with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find this observation");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
 }

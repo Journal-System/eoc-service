@@ -26,9 +26,16 @@ public class EncounterServiceImpl implements EncounterService {
     public ResponseEntity<?> getAllEncountersByPatientId(Integer id) {
         try {
             List<Encounter> encounterList = encounterRepository.getAllEncountersByPatientId(id);
-            return ResponseEntity.status(HttpStatus.OK).body(convertEncounterToDto(encounterList));
+            if (!encounterList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(convertEncounterToDto(encounterList));
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Encounters by this id do not exist");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            e.printStackTrace(); // To show the details of the error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred");
         }
     }
 
@@ -37,46 +44,47 @@ public class EncounterServiceImpl implements EncounterService {
         try {
             Encounter encounter = encounterRepository.findById(id).orElse(null);
             if (encounter != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(convertEncounterToDto(encounter));
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(convertEncounterToDto(encounter));
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find this encounter with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Could not find this encounter");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+            e.printStackTrace(); // To show the details of the error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred");
         }
     }
 
     @Override
     public ResponseEntity<?> addEncounter(String reason, Integer patientId, Integer doctorId) {
-        try {
-            if (patientId != null && doctorId != null) {
-                Encounter encounter = new Encounter();
-                encounter.setReason(reason);
-                encounter.setPatientId(patientId);
-                encounter.setDoctorId(doctorId);
-                encounter.setObservationId(null);
-                encounterRepository.save(encounter);
-                return ResponseEntity.status(HttpStatus.OK).body("Encounter added");
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find patient and/or doctor");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+        if (patientId != null && doctorId != null) {
+            Encounter encounter = new Encounter();
+            encounter.setReason(reason);
+            encounter.setPatientId(patientId);
+            encounter.setDoctorId(doctorId);
+            encounter.setObservationId(null);
+            encounterRepository.save(encounter);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Encounter added");
         }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Could not find patient and/or doctor");
     }
 
     @Override
     public ResponseEntity<?> addObservationToEncounter(Integer observationId, Integer encounterId) {
-        try {
-            Encounter encounter = encounterRepository.findById(encounterId).orElse(null);
-            Observation observation = observationRepository.findById(observationId).orElse(null);
+        Encounter encounter = encounterRepository.findById(encounterId).orElse(null);
+        Observation observation = observationRepository.findById(observationId).orElse(null);
 
-            if (encounter != null && observation != null) {
-                encounter.setObservationId(observationId);
-                encounterRepository.save(encounter); // might work
-                return ResponseEntity.status(HttpStatus.OK).body(convertEncounterToDto(encounter));
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Encounter is null");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+        if (encounter != null && observation != null) {
+            encounter.setObservationId(observationId);
+            encounterRepository.save(encounter); // might work
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(convertEncounterToDto(encounter));
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Encounter is null");
     }
 }

@@ -38,6 +38,5 @@ public class ObservationController {
     public ResponseEntity<?> addOneObservation(@RequestParam String observation,
                                                @RequestParam Integer patientId, @RequestParam Integer staffOrDoctorId) {
         return observationService.addObservation(observation, patientId, staffOrDoctorId);
-        //TODO: This is wrong, should be done in another way
     }
 }

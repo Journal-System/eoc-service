@@ -32,8 +32,9 @@ public class ConditionServiceImpl implements ConditionService {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(convertConditionToDto(condition.get()));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("");
+                    .body("An error occurred");
         }
     }
 
@@ -45,13 +46,14 @@ public class ConditionServiceImpl implements ConditionService {
             if (condition != null) {
                 conditionRepository.delete(condition);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body("condition with conditionId: " + id + " deleted.");
+                        .body("Condition deleted");
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Could not find condition with id: " + id);
+                    .body("Could not find condition");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("");
+                    .body("An error occurred");
         }
     }
 
@@ -71,7 +73,7 @@ public class ConditionServiceImpl implements ConditionService {
                     .body("Could not find patient");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("");
+                    .body("An error occurred");
         }
     }
 
@@ -91,7 +93,7 @@ public class ConditionServiceImpl implements ConditionService {
                     .body("Could not find patient to put condition on");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("");
+                    .body("An error occurred");
         }
     }
 }

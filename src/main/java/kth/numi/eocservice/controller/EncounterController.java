@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/encounter")
 @Tag(name = "Encounter Controller", description = "Manage encounter data")
-@PreAuthorize("hasRole('EOC')")
 public class EncounterController {
     final private EncounterService encounterService;
 
@@ -23,6 +22,7 @@ public class EncounterController {
     @GetMapping("/getAll/{id}")
     @Operation(summary = "Get all encounters by id",
             description = "Get all encounters by patient from the database")
+    @PreAuthorize("hasAnyRole('PATIENT', 'EOC')")
     public ResponseEntity<?> getAllEncounters(@PathVariable Integer id) {
         return encounterService.getAllEncountersByPatientId(id);
     }
@@ -30,6 +30,7 @@ public class EncounterController {
     @GetMapping("/getOne/{id}")
     @Operation(summary = "Get one encounter by id",
             description = "Get one encounter by encounter id from the database")
+    @PreAuthorize("hasRole('EOC')")
     public ResponseEntity<?> getOneEncounter(@PathVariable Integer id) {
         return encounterService.getOneEncounterByEncounterId(id);
     }
@@ -37,6 +38,7 @@ public class EncounterController {
     @PostMapping("/addEncounter")
     @Operation(summary = "Add encounter",
             description = "Add new encounter to the database")
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<?> addEncounter(@RequestParam String reason, @RequestParam Integer patientId,
                                           @RequestParam Integer doctorId) {
         return encounterService.addEncounter(reason, patientId, doctorId);
@@ -45,6 +47,7 @@ public class EncounterController {
     @PostMapping("/addObservation")
     @Operation(summary = "Add observation",
             description = "Add new observation to a existing encounter")
+    @PreAuthorize("hasRole('EOC')")
     public ResponseEntity<?> addObservation(@RequestParam Integer observationId, @RequestParam Integer encounterId) {
         return encounterService.addObservationToEncounter(observationId, encounterId);
     }

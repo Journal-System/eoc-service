@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/observation")
 @Tag(name = "Observation Controller", description = "Manage observation data")
-@PreAuthorize("hasRole('EOC')")
 public class ObservationController {
 
     final private ObservationService observationService;
@@ -24,12 +23,14 @@ public class ObservationController {
     @GetMapping("/getAll/{id}")
     @Operation(summary = "Get all observations based on patientId",
             description = "Get all observations for one specific patient")
+    @PreAuthorize("hasAnyRole('PATIENT', 'EOC')")
     public ResponseEntity<?> getPatientObservations(@PathVariable Integer id) {
         return observationService.getAllObservationsByPatientId(id);
     }
 
     @GetMapping("/get/{id}")
     @Operation(summary = "Get one observation", description = "Get one specific observation based on observationId")
+    @PreAuthorize("hasRole('EOC')")
     public ResponseEntity<?> getOneObservation(@PathVariable Integer id) {
         return observationService.getOneObservationByObservationId(id);
     }
@@ -37,6 +38,7 @@ public class ObservationController {
     @PostMapping("/add")
     @Operation(summary = "add a new observation",
             description = "Adds a new observation made by staff or doctor to a patient")
+    @PreAuthorize("hasRole('EOC')")
     public ResponseEntity<?> addOneObservation(@RequestParam String observation,
                                                @RequestParam Integer patientId, @RequestParam Integer staffOrDoctorId) {
         return observationService.addObservation(observation, patientId, staffOrDoctorId);

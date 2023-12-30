@@ -5,11 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kth.numi.eocservice.service.Condition.ConditionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/condition")
 @Tag(name = "Condition Controller", description = "Manage patients conditions")
+@PreAuthorize("hasRole('EOC')")
 public class ConditionController {
 
     final private ConditionService conditionService;

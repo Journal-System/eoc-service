@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ class EncounterControllerTest {
 
         mvc.perform(get("/encounter/getAll/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -65,6 +67,7 @@ class EncounterControllerTest {
 
         mvc.perform(get("/encounter/getAll/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -82,6 +85,7 @@ class EncounterControllerTest {
 
         mvc.perform(get("/encounter/getOne/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -102,6 +106,7 @@ class EncounterControllerTest {
 
         mvc.perform(get("/encounter/getOne/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -119,6 +124,7 @@ class EncounterControllerTest {
 
         mvc.perform(post("/encounter/addEncounter")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON)
                         .param("reason", "Headache")
                         .param("patientId", "1")
@@ -142,6 +148,7 @@ class EncounterControllerTest {
 
         mvc.perform(post("/encounter/addEncounter")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .accept(MediaType.APPLICATION_JSON)
                         .param("reason", "Headache")
                         .param("patientId", "1")
@@ -162,6 +169,7 @@ class EncounterControllerTest {
         mvc.perform(post("/encounter/addObservation")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .param("observationId", "3")
                         .param("encounterId", "1"))
                 .andDo(print())
@@ -183,6 +191,7 @@ class EncounterControllerTest {
         mvc.perform(post("/encounter/addObservation")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt((jwt) -> jwt.subject("test@test.com")))
                         .param("observationId", "1")
                         .param("encounterId", "3"))
                 .andDo(print())

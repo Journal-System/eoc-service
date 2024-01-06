@@ -23,14 +23,14 @@ public class ObservationController {
     @GetMapping("/getAll/{id}")
     @Operation(summary = "Get all observations based on patientId",
             description = "Get all observations for one specific patient")
-    @PreAuthorize("hasAnyRole('PATIENT', 'EOC')")
+    @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR', 'STAFF')")
     public ResponseEntity<?> getPatientObservations(@PathVariable Integer id) {
         return observationService.getAllObservationsByPatientId(id);
     }
 
     @GetMapping("/get/{id}")
     @Operation(summary = "Get one observation", description = "Get one specific observation based on observationId")
-    @PreAuthorize("hasRole('EOC')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'STAFF')")
     public ResponseEntity<?> getOneObservation(@PathVariable Integer id) {
         return observationService.getOneObservationByObservationId(id);
     }
@@ -38,7 +38,7 @@ public class ObservationController {
     @PostMapping("/add")
     @Operation(summary = "add a new observation",
             description = "Adds a new observation made by staff or doctor to a patient")
-    @PreAuthorize("hasRole('EOC')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'STAFF')")
     public ResponseEntity<?> addOneObservation(@RequestParam String observation,
                                                @RequestParam Integer patientId, @RequestParam Integer staffOrDoctorId) {
         return observationService.addObservation(observation, patientId, staffOrDoctorId);

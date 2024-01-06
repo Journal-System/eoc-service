@@ -22,7 +22,7 @@ public class EncounterController {
     @GetMapping("/getAll/{id}")
     @Operation(summary = "Get all encounters by id",
             description = "Get all encounters by patient from the database")
-    @PreAuthorize("hasAnyRole('PATIENT', 'EOC')")
+    @PreAuthorize("hasAnyRole('PATIENT', 'ADMIN')")
     public ResponseEntity<?> getAllEncounters(@PathVariable Integer id) {
         return encounterService.getAllEncountersByPatientId(id);
     }
@@ -30,7 +30,7 @@ public class EncounterController {
     @GetMapping("/getOne/{id}")
     @Operation(summary = "Get one encounter by id",
             description = "Get one encounter by encounter id from the database")
-    @PreAuthorize("hasRole('EOC')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'STAFF')")
     public ResponseEntity<?> getOneEncounter(@PathVariable Integer id) {
         return encounterService.getOneEncounterByEncounterId(id);
     }
@@ -47,7 +47,7 @@ public class EncounterController {
     @PostMapping("/addObservation")
     @Operation(summary = "Add observation",
             description = "Add new observation to a existing encounter")
-    @PreAuthorize("hasRole('EOC')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'STAFF')")
     public ResponseEntity<?> addObservation(@RequestParam Integer observationId, @RequestParam Integer encounterId) {
         return encounterService.addObservationToEncounter(observationId, encounterId);
     }

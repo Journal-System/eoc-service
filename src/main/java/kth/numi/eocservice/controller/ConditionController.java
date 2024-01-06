@@ -23,7 +23,7 @@ public class ConditionController {
     @GetMapping("/get/{id}")
     @Operation(summary = "Get one specific condition with a condition id",
             description = "Gets one condition from the database")
-    @PreAuthorize("hasRole('EOC')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'STAFF')")
     public ResponseEntity<?> get(@PathVariable Integer id) {
         return conditionService.getConditionByConditionId(id);
     }
@@ -31,7 +31,7 @@ public class ConditionController {
     @GetMapping("/getAll/{id}")
     @Operation(summary = "Get all conditions of a specific patient",
             description = "Get a list of all conditions for a specific patient from the database")
-    @PreAuthorize("hasAnyRole('PATIENT', 'EOC')")
+    @PreAuthorize("hasAnyRole('PATIENT', 'ADMIN')")
     public ResponseEntity<?> getPatientsConditions(@PathVariable Integer id) {
         return conditionService.getConditionsByUserId(id);
     }
